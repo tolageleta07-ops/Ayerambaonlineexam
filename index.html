@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AYER AMBA ONLINE EXAM - Full Admin Controls</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .hidden { display: none !important; }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .btn-primary { background: #4a90e2; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-warning { background: #e67e22; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-info { background: #3498db; color: white; }
+        .btn-purple { background: #9b59b6; color: white; }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 8px; 
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #f0f0f0;
+            border-radius: 5px 5px 0 0;
+        }
+        .admin-tab.active {
+            background: #4a90e2;
+            color: white;
+        }
+        
+        .admin-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4a90e2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .question-content {
+            flex: 1;
+        }
+        .question-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .student-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .score-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .question-dot { 
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 5px; 
+            cursor: pointer; 
+        }
+        .question-dot.answered { background: #27ae60; color: white; }
+        .question-dot.unanswered { background: #ecf0f1; }
+        .question-dot.current { border: 3px solid #4a90e2; }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .sync-status {
+            background: #1abc9c;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .add-question-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #4a90e2;
+        }
+        
+        .upload-area {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed #4a90e2;
+        }
+        
+        .pass { color: #27ae60; font-weight: bold; }
+        .fail { color: #e74c3c; font-weight: bold; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #4a90e2;
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #eee;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #27ae60;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            transition: width 0.3s;
+        }
+        
+        .search-box {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏫 AYER AMBA ONLINE EXAM TRAINING CENTER</h1>
+        <p>Full Admin Control - Manage Questions, Students & Scores</p>
+    </div>
+    
+    <div class="container">
+        <div class="box">
+            <div class="sync-status" id="syncStatus">
+                🔄 Connecting to Google Sheets...
+            </div>
+            
+            <!-- HOME SECTION -->
+            <div id="homeSection">
+                <h2>Welcome to Online Exam System</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="homeTotalQuestions">0</div>
+                        <div class="stat-label">Total Questions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="homeTotalStudents">0</div>
+                        <div class="stat-label">Registered Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="homeTotalExams">0</div>
+                        <div class="stat-label">Exams Taken</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <button class="btn btn-primary" onclick="showStudentSection()">👨‍🎓 Student Section</button>
+                    <button class="btn btn-warning" onclick="showAdminSection()">👨‍💼 Admin Section</button>
+                </div>
+                
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px;">
+                    <p><strong>🔐 Admin Login:</strong> username: <code>admin</code> / password: <code>tola@121212</code></p>
+                    <p><strong>👨‍🎓 Student:</strong> Register new account or login with existing</p>
+                    <p style="color: #1abc9c;">✅ <strong>Full Admin Controls:</strong> Delete questions (one or all), manage students, view all scores!</p>
+                </div>
+            </div>
+
+            <!-- STUDENT SECTION -->
+            <div id="studentSection" class="hidden">
+                <div id="studentLogin" class="login-container">
+                    <h2>👨‍🎓 Student Login</h2>
+                    <input type="text" id="sUser" placeholder="Username">
+                    <input type="password" id="sPass" placeholder="Password">
+                    <button class="btn btn-primary" onclick="studentLogin()">Login</button>
+                    <button class="btn btn-success" onclick="showStudentRegister()">Register</button>
+                    <button class="btn" onclick="showHomeSection()">Back</button>
+                </div>
+
+                <div id="studentRegister" class="hidden login-container">
+                    <h2>📝 Student Registration</h2>
+                    <input type="text" id="regUser" placeholder="Username">
+                    <input type="password" id="regPass" placeholder="Password">
+                    <button class="btn btn-success" onclick="registerUser()">Create Account</button>
+                    <button class="btn" onclick="showStudentLoginSection()">Back</button>
+                </div>
+
+                <div id="studentDashboard" class="hidden">
+                    <h2>👨‍🎓 Student Dashboard</h2>
+                    <p>Welcome, <strong id="studentName"></strong>!</p>
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-primary" onclick="showStudentExam()">📝 Take Exam</button>
+                        <button class="btn btn-info" onclick="showStudentHistory()">📊 My History</button>
+                    </div>
+
+                    <div id="studentExamArea" class="hidden">
+                        <h3>📝 Online Exam</h3>
+                        <div id="noQuestions" class="hidden" style="color: red; padding: 20px; background: #fee;">No questions available. Admin needs to add questions.</div>
+                        <div id="examContent">
+                            <div id="questionCounter" style="text-align: center; margin: 20px;"></div>
+                            <div style="background: #f8f9fa; padding: 25px; border-radius: 10px;">
+                                <div id="questionText" style="font-size: 1.2em; font-weight: bold; margin-bottom: 20px;"></div>
+                                <div id="optionsContainer"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin: 20px 0;">
+                                <button class="btn btn-primary" onclick="previousQuestion()">⬅ Previous</button>
+                                <span id="progressText"></span>
+                                <button class="btn btn-primary" onclick="nextQuestion()">Next ➔</button>
+                            </div>
+                            <div id="questionDots" style="text-align: center; margin: 20px;"></div>
+                            <button class="btn btn-success" onclick="submitExam()" style="width: 100%;">✅ Submit Exam</button>
+                            <div id="result" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+
+                    <div id="studentHistoryArea" class="hidden">
+                        <h3>📊 My Exam History</h3>
+                        <div id="studentHistoryList"></div>
+                    </div>
+                    <button class="btn btn-danger" onclick="logout()" style="margin-top: 20px;">Logout</button>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION -->
+            <div id="adminSection" class="hidden">
+                <div id="adminLogin" class="login-container">
+                    <h2>👨‍💼 Admin Login</h2>
+                    <input type="text" id="aUser" value="admin">
+                    <input type="password" id="aPass" value="tola@121212">
+                    <button class="btn btn-warning" onclick="adminLogin()">Login</button>
+                    <button class="btn" onclick="showHomeSection()">Back</button>
+                </div>
+
+                <div id="adminDashboard" class="hidden">
+                    <h2>👨‍💼 Admin Dashboard</h2>
+                    <div class="admin-tabs">
+                        <div class="admin-tab active" onclick="showAdminTab('overview', this)">📊 Overview</div>
+                        <div class="admin-tab" onclick="showAdminTab('add', this)">➕ Add Question</div>
+                        <div class="admin-tab" onclick="showAdminTab('upload', this)">📁 Upload File</div>
+                        <div class="admin-tab" onclick="showAdminTab('questions', this)">📋 Questions</div>
+                        <div class="admin-tab" onclick="showAdminTab('students', this)">👥 Students</div>
+                        <div class="admin-tab" onclick="showAdminTab('scores', this)">📈 Scores</div>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div id="adminOverview" class="admin-content">
+                        <h3>System Overview</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card"><div class="stat-number" id="adminTotalQuestions">0</div><div>Questions</div></div>
+                            <div class="stat-card"><div class="stat-number" id="adminTotalStudents">0</div><div>Students</div></div>
+                            <div class="stat-card"><div class="stat-number" id="adminTotalExams">0</div><div>Exams</div></div>
+                            <div class="stat-card"><div class="stat-number" id="adminAvgScore">0%</div><div>Avg Score</div></div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card" style="background: #27ae60;"><div class="stat-number" id="adminPassCount">0</div><div>Passed</div></div>
+                            <div class="stat-card" style="background: #e74c3c;"><div class="stat-number" id="adminFailCount">0</div><div>Failed</div></div>
+                            <div class="stat-card" style="background: #f39c12;"><div class="stat-number" id="adminPassRate">0%</div><div>Pass Rate</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Add Question Tab -->
+                    <div id="adminAdd" class="admin-content hidden">
+                        <h3>➕ Add New Question</h3>
+                        <div class="add-question-form">
+                            <input type="text" id="newQuestion" placeholder="Enter Question">
+                            <input type="text" id="optA" placeholder="Option A">
+                            <input type="text" id="optB" placeholder="Option B">
+                            <input type="text" id="optC" placeholder="Option C">
+                            <input type="text" id="optD" placeholder="Option D">
+                            <select id="correctAnswer">
+                                <option value="">Select Correct Answer</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            <button class="btn btn-success" onclick="addQuestionToSheet()" style="width: 100%;">📤 Add Question to Google Sheets</button>
+                        </div>
+                        <div id="addMessage" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <!-- Upload File Tab -->
+                    <div id="adminUpload" class="admin-content hidden">
+                        <h3>📁 Upload Questions File</h3>
+                        <div class="upload-area">
+                            <p><strong>File Format:</strong> .txt file with Q:/A:/B:/C:/D:/ANS: (blank line between questions)</p>
+                            <input type="file" id="fileInput" accept=".txt">
+                            <div class="button-group">
+                                <button class="btn btn-success" onclick="uploadFileToSheet(true)">📤 Upload & Replace All</button>
+                                <button class="btn btn-primary" onclick="uploadFileToSheet(false)">📤 Upload & Append</button>
+                                <button class="btn btn-purple" onclick="loadSampleQuestions()">📚 Load Sample Questions</button>
+                            </div>
+                            <div id="uploadProgress" style="margin-top: 10px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Questions Tab - With Delete Options -->
+                    <div id="adminQuestions" class="admin-content hidden">
+                        <h3>📋 Manage Questions</h3>
+                        <div class="button-group">
+                            <button class="btn btn-danger" onclick="deleteAllQuestions()">🗑️ Delete ALL Questions</button>
+                            <button class="btn btn-primary" onclick="refreshQuestions()">🔄 Refresh</button>
+                        </div>
+                        <div id="questionList"></div>
+                    </div>
+
+                    <!-- Students Tab - With Delete Options -->
+                    <div id="adminStudents" class="admin-content hidden">
+                        <h3>👥 Manage Students</h3>
+                        <div class="search-box">
+                            <input type="text" id="studentSearch" placeholder="Search students by username..." onkeyup="searchStudents()">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-danger" onclick="deleteAllStudents()">🗑️ Delete ALL Students & Scores</button>
+                            <button class="btn btn-primary" onclick="loadStudentsList()">🔄 Refresh</button>
+                        </div>
+                        <div id="studentList"></div>
+                    </div>
+
+                    <!-- Scores Tab - View All Student Scores -->
+                    <div id="adminScores" class="admin-content hidden">
+                        <h3>📈 All Exam Scores</h3>
+                        <div class="search-box">
+                            <input type="text" id="scoreSearch" placeholder="Search by student name..." onkeyup="filterScores()">
+                            <select id="scoreFilter" onchange="filterScores()">
+                                <option value="all">All Students</option>
+                            </select>
+                        </div>
+                        <div class="table-container">
+                            <table style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Date & Time</th>
+                                        <th>Score</th>
+                                        <th>Percentage</th>
+                                        <th>Result</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scoresTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-danger" onclick="deleteAllScores()">🗑️ Delete ALL Scores</button>
+                            <button class="btn btn-primary" onclick="loadScoresTable()">🔄 Refresh</button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger" onclick="logout()" style="margin-top: 20px;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== YOUR GOOGLE APPS SCRIPT URL ====================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzyWg3HWzfclbipDxOYbpH6Ab6FjPh4kLLrVBCEJUo14UCNi1eBynf1e9dKN9KOBI/exec";
+        
+        // ==================== GLOBAL VARIABLES ====================
+        let currentUser = "";
+        let currentQuestion = 0;
+        let answers = {};
+        let examSubmitted = false;
+        let currentExamId = null;
+        let globalQuestions = [];
+        
+        // ==================== GOOGLE SHEETS API FUNCTIONS ====================
+        
+        async function loadQuestionsFromSheet() {
+            try {
+                document.getElementById("syncStatus").innerHTML = "🔄 Loading questions from Google Sheets...";
+                const response = await fetch(SCRIPT_URL);
+                const questions = await response.json();
+                
+                globalQuestions = questions;
+                localStorage.setItem("cachedQuestions", JSON.stringify(questions));
+                document.getElementById("syncStatus").innerHTML = `✅ Loaded ${questions.length} questions from Google Sheets`;
+                return questions;
+            } catch (error) {
+                console.error("Error loading:", error);
+                document.getElementById("syncStatus").innerHTML = "⚠️ Error loading. Using cached data.";
+                const cached = localStorage.getItem("cachedQuestions");
+                if (cached) {
+                    globalQuestions = JSON.parse(cached);
+                    return globalQuestions;
+                }
+                return [];
+            }
+        }
+        
+        async function addQuestionToSheet() {
+            const question = document.getElementById("newQuestion").value.trim();
+            const optA = document.getElementById("optA").value.trim();
+            const optB = document.getElementById("optB").value.trim();
+            const optC = document.getElementById("optC").value.trim();
+            const optD = document.getElementById("optD").value.trim();
+            const correctLetter = document.getElementById("correctAnswer").value;
+            
+            if (!question || !optA || !optB || !optC || !optD || !correctLetter) {
+                document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Please fill all fields</span>';
+                return;
+            }
+            
+            let correctAnswer = "";
+            if (correctLetter === "A") correctAnswer = optA;
+            else if (correctLetter === "B") correctAnswer = optB;
+            else if (correctLetter === "C") correctAnswer = optC;
+            else if (correctLetter === "D") correctAnswer = optD;
+            
+            document.getElementById("addMessage").innerHTML = '<span style="color: blue;">📤 Adding to Google Sheets...</span>';
+            
+            try {
+                const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(question)}&optA=${encodeURIComponent(optA)}&optB=${encodeURIComponent(optB)}&optC=${encodeURIComponent(optC)}&optD=${encodeURIComponent(optD)}&answer=${encodeURIComponent(correctAnswer)}`;
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById("addMessage").innerHTML = '<span style="color: green;">✅ Question added successfully!</span>';
+                    document.getElementById("newQuestion").value = "";
+                    document.getElementById("optA").value = "";
+                    document.getElementById("optB").value = "";
+                    document.getElementById("optC").value = "";
+                    document.getElementById("optD").value = "";
+                    document.getElementById("correctAnswer").value = "";
+                    setTimeout(() => refreshQuestions(), 1000);
+                    updateAdminOverview();
+                } else {
+                    document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Error adding question</span>';
+                }
+            } catch (error) {
+                document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Error connecting to server</span>';
+            }
+        }
+        
+        // ==================== DELETE FUNCTIONS ====================
+        
+        // Delete single question from Google Sheets
+        async function deleteSingleQuestion(index) {
+            if (!confirm(`Delete question ${index + 1}? This cannot be undone!`)) return;
+            
+            try {
+                const questions = await loadQuestionsFromSheet();
+                questions.splice(index, 1);
+                
+                // Clear all and re-upload remaining questions
+                await clearAllQuestionsFromSheet();
+                for (let q of questions) {
+                    const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.q)}&optA=${encodeURIComponent(q.options[0])}&optB=${encodeURIComponent(q.options[1])}&optC=${encodeURIComponent(q.options[2])}&optD=${encodeURIComponent(q.options[3])}&answer=${encodeURIComponent(q.answer)}`;
+                    await fetch(url);
+                }
+                alert(`✅ Question ${index + 1} deleted successfully!`);
+                refreshQuestions();
+                updateAdminOverview();
+            } catch (error) {
+                alert("❌ Error deleting question");
+            }
+        }
+        
+        // Delete all questions from Google Sheets
+        async function deleteAllQuestions() {
+            if (!confirm("⚠️ Delete ALL questions from Google Sheets? This cannot be undone!")) return;
+            
+            try {
+                await clearAllQuestionsFromSheet();
+                alert("✅ All questions deleted successfully!");
+                refreshQuestions();
+                updateAdminOverview();
+            } catch (error) {
+                alert("❌ Error deleting questions");
+            }
+        }
+        
+        async function clearAllQuestionsFromSheet() {
+            try {
+                const url = `${SCRIPT_URL}?action=delete`;
+                await fetch(url);
+            } catch (error) {
+                console.error("Error clearing questions:", error);
+            }
+        }
+        
+        // ==================== STUDENT DELETE FUNCTIONS ====================
+        
+        // Delete single student
+        function deleteSingleStudent(index) {
+            if (confirm("Delete this student? All their scores will also be deleted.")) {
+                let students = loadLocalData("students");
+                let scores = loadLocalData("scores");
+                let username = students[index].username;
+                students.splice(index, 1);
+                let newScores = scores.filter(s => s.student !== username);
+                saveLocalData("students", students);
+                saveLocalData("scores", newScores);
+                loadStudentsList();
+                updateAdminOverview();
+                updateHomeStats();
+                alert(`✅ Student deleted!`);
+            }
+        }
+        
+        // Delete all students
+        function deleteAllStudents() {
+            if (confirm("⚠️ Delete ALL students and their scores? This cannot be undone!")) {
+                saveLocalData("students", []);
+                saveLocalData("scores", []);
+                loadStudentsList();
+                loadScoresTable();
+                updateAdminOverview();
+                updateHomeStats();
+                alert("✅ All students and scores deleted!");
+            }
+        }
+        
+        // Delete all scores
+        function deleteAllScores() {
+            if (confirm("⚠️ Delete ALL score records? This cannot be undone!")) {
+                saveLocalData("scores", []);
+                loadScoresTable();
+                updateAdminOverview();
+                updateHomeStats();
+                alert("✅ All scores deleted!");
+            }
+        }
+        
+        // Delete single score
+        function deleteSingleScore(index) {
+            if (confirm("Delete this score record?")) {
+                let scores = loadLocalData("scores");
+                scores.splice(index, 1);
+                saveLocalData("scores", scores);
+                loadScoresTable();
+                updateAdminOverview();
+                updateHomeStats();
+                alert("✅ Score deleted!");
+            }
+        }
+        
+        // ==================== FILE UPLOAD ====================
+        
+        async function uploadFileToSheet(replace) {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert("Please select a .txt file first");
+                return;
+            }
+            
+            const progressDiv = document.getElementById("uploadProgress");
+            progressDiv.innerHTML = '<span style="color: blue;">📖 Reading file...</span>';
+            
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const text = e.target.result;
+                const blocks = text.split(/\n\s*\n/);
+                let added = 0;
+                let errors = 0;
+                let questionsToAdd = [];
+                
+                for (let block of blocks) {
+                    if (!block.trim()) continue;
+                    
+                    const lines = block.split('\n');
+                    let q = "", opts = [], ans = "";
+                    
+                    for (let line of lines) {
+                        line = line.trim();
+                        if (line.startsWith("Q:")) q = line.substring(2).trim();
+                        else if (line.startsWith("A:")) opts[0] = line.substring(2).trim();
+                        else if (line.startsWith("B:")) opts[1] = line.substring(2).trim();
+                        else if (line.startsWith("C:")) opts[2] = line.substring(2).trim();
+                        else if (line.startsWith("D:")) opts[3] = line.substring(2).trim();
+                        else if (line.startsWith("ANS:")) ans = line.substring(4).trim().toUpperCase();
+                    }
+                    
+                    if (q && opts.length === 4 && opts.every(o => o) && ans) {
+                        let idx = "ABCD".indexOf(ans);
+                        if (idx !== -1 && opts[idx]) {
+                            questionsToAdd.push({
+                                question: q,
+                                optA: opts[0],
+                                optB: opts[1],
+                                optC: opts[2],
+                                optD: opts[3],
+                                answer: opts[idx]
+                            });
+                            added++;
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                }
+                
+                if (replace) {
+                    progressDiv.innerHTML = '<span style="color: blue;">🗑️ Clearing existing questions...</span>';
+                    await clearAllQuestionsFromSheet();
+                }
+                
+                progressDiv.innerHTML = `<span style="color: blue;">📤 Uploading ${added} questions...</span>`;
+                
+                let successCount = 0;
+                for (let i = 0; i < questionsToAdd.length; i++) {
+                    const q = questionsToAdd[i];
+                    const percent = Math.round((i + 1) / questionsToAdd.length * 100);
+                    progressDiv.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;">${percent}%</div></div><span>Uploading ${i+1}/${questionsToAdd.length}...</span>`;
+                    
+                    try {
+                        const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.question)}&optA=${encodeURIComponent(q.optA)}&optB=${encodeURIComponent(q.optB)}&optC=${encodeURIComponent(q.optC)}&optD=${encodeURIComponent(q.optD)}&answer=${encodeURIComponent(q.answer)}`;
+                        const response = await fetch(url);
+                        const result = await response.json();
+                        if (result.success) successCount++;
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    } catch (err) {
+                        console.error("Error uploading:", err);
+                    }
+                }
+                
+                progressDiv.innerHTML = `<span style="color: green;">✅ Complete! Added ${successCount} questions. ${errors} errors.</span>`;
+                setTimeout(() => {
+                    progressDiv.innerHTML = "";
+                    refreshQuestions();
+                    updateAdminOverview();
+                }, 3000);
+                
+                fileInput.value = "";
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        async function loadSampleQuestions() {
+            const sampleQuestions = [
+                {question: "What is the capital of France?", optA: "London", optB: "Berlin", optC: "Paris", optD: "Madrid", answer: "Paris"},
+                {question: "Which planet is known as the Red Planet?", optA: "Venus", optB: "Mars", optC: "Jupiter", optD: "Saturn", answer: "Mars"},
+                {question: "What is 15 + 6?", optA: "19", optB: "20", optC: "21", optD: "22", answer: "21"},
+                {question: "Who wrote Romeo and Juliet?", optA: "Dickens", optB: "Shakespeare", optC: "Twain", optD: "Austen", answer: "Shakespeare"},
+                {question: "What is the chemical symbol for water?", optA: "CO2", optB: "O2", optC: "H2O", optD: "NaCl", answer: "H2O"},
+                {question: "How many continents are there?", optA: "5", optB: "6", optC: "7", optD: "8", answer: "7"},
+                {question: "What is the largest ocean?", optA: "Atlantic", optB: "Indian", optC: "Arctic", optD: "Pacific", answer: "Pacific"},
+                {question: "Who painted the Mona Lisa?", optA: "Van Gogh", optB: "Picasso", optC: "Da Vinci", optD: "Michelangelo", answer: "Da Vinci"},
+                {question: "What is the square root of 64?", optA: "6", optB: "7", optC: "8", optD: "9", answer: "8"},
+                {question: "Which animal is king of the jungle?", optA: "Elephant", optB: "Tiger", optC: "Lion", optD: "Giraffe", answer: "Lion"}
+            ];
+            
+            const progressDiv = document.getElementById("uploadProgress");
+            progressDiv.innerHTML = '<span style="color: blue;">📤 Loading sample questions...</span>';
+            
+            await clearAllQuestionsFromSheet();
+            
+            let successCount = 0;
+            for (let i = 0; i < sampleQuestions.length; i++) {
+                const q = sampleQuestions[i];
+                const percent = Math.round((i + 1) / sampleQuestions.length * 100);
+                progressDiv.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;">${percent}%</div></div><span>Loading ${i+1}/${sampleQuestions.length}...</span>`;
+                
+                try {
+                    const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.question)}&optA=${encodeURIComponent(q.optA)}&optB=${encodeURIComponent(q.optB)}&optC=${encodeURIComponent(q.optC)}&optD=${encodeURIComponent(q.optD)}&answer=${encodeURIComponent(q.answer)}`;
+                    const response = await fetch(url);
+                    const result = await response.json();
+                    if (result.success) successCount++;
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                } catch (err) {
+                    console.error("Error loading sample:", err);
+                }
+            }
+            
+            progressDiv.innerHTML = `<span style="color: green;">✅ Loaded ${successCount} sample questions!</span>`;
+            setTimeout(() => {
+                progressDiv.innerHTML = "";
+                refreshQuestions();
+                updateAdminOverview();
+            }, 2000);
+        }
+        
+        // ==================== DISPLAY FUNCTIONS ====================
+        
+        async function refreshQuestions() {
+            const questions = await loadQuestionsFromSheet();
+            const qList = document.getElementById("questionList");
+            if (!qList) return;
+            
+            if (questions.length === 0) {
+                qList.innerHTML = "<p>No questions yet. Upload a file or add a question!</p>";
+            } else {
+                let html = "";
+                questions.forEach((q, i) => {
+                    html += `
+                        <div class="question-card">
+                            <div class="question-content">
+                                <strong>Q${i+1}: ${q.q}</strong><br>
+                                A: ${q.options[0]}<br>
+                                B: ${q.options[1]}<br>
+                                C: ${q.options[2]}<br>
+                                D: ${q.options[3]}<br>
+                                <span style="color: #27ae60;">✓ Answer: ${q.answer}</span>
+                            </div>
+                            <div class="question-actions">
+                                <button class="btn btn-danger" onclick="deleteSingleQuestion(${i})" style="padding: 5px 15px;">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                qList.innerHTML = html;
+            }
+            updateHomeStats();
+        }
+        
+        async function loadStudentsList() {
+            let students = loadLocalData("students");
+            let searchTerm = document.getElementById("studentSearch")?.value.toLowerCase() || "";
+            let filteredStudents = students.filter(s => s.username.toLowerCase().includes(searchTerm));
+            
+            let sList = document.getElementById("studentList");
+            if (!sList) return;
+            
+            if (filteredStudents.length === 0) {
+                sList.innerHTML = "<p>No students found.</p>";
+            } else {
+                let html = "";
+                filteredStudents.forEach((s, originalIndex) => {
+                    let actualIndex = students.findIndex(st => st.username === s.username);
+                    html += `
+                        <div class="student-card">
+                            <div>
+                                <strong>${s.username}</strong><br>
+                                <small>📅 Registered: ${new Date(s.registered).toLocaleDateString()}</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-info" onclick="viewStudentScores('${s.username}')" style="padding: 5px 15px;">📊 Scores</button>
+                                <button class="btn btn-danger" onclick="deleteSingleStudent(${actualIndex})" style="padding: 5px 15px;">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                sList.innerHTML = html;
+            }
+        }
+        
+        function searchStudents() {
+            loadStudentsList();
+        }
+        
+        function viewStudentScores(username) {
+            document.getElementById("scoreFilter").value = username;
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-tab')[5].classList.add('active');
+            document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('adminScores').classList.remove('hidden');
+            loadScoresTable();
+        }
+        
+        async function loadScoresTable() {
+            let scores = loadLocalData("scores");
+            let filter = document.getElementById("scoreFilter")?.value || "all";
+            let searchTerm = document.getElementById("scoreSearch")?.value.toLowerCase() || "";
+            
+            let filteredScores = scores.filter(s => {
+                let matchFilter = filter === "all" || s.student === filter;
+                let matchSearch = s.student.toLowerCase().includes(searchTerm);
+                return matchFilter && matchSearch;
+            });
+            filteredScores.sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            let tbody = document.getElementById("scoresTableBody");
+            if (!tbody) return;
+            
+            if (filteredScores.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No scores found</td></tr>';
+            } else {
+                tbody.innerHTML = "";
+                filteredScores.forEach((score, idx) => {
+                    let originalIndex = scores.findIndex(s => s.id === score.id);
+                    let resultClass = score.percentage >= 70 ? 'pass' : 'fail';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${score.student}</strong></td>
+                            <td>${new Date(score.date).toLocaleString()}</td>
+                            <td>${score.score}/${score.total}</td>
+                            <td>${score.percentage}%</td>
+                            <td class="${resultClass}">${score.percentage >= 70 ? '✅ PASS' : '❌ FAIL'}</td>
+                            <td><button class="btn btn-danger" onclick="deleteSingleScore(${originalIndex})" style="padding: 5px 10px;">Delete</button></td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+        
+        function filterScores() {
+            loadScoresTable();
+        }
+        
+        async function updateAdminOverview() {
+            const questions = await loadQuestionsFromSheet();
+            const students = loadLocalData("students");
+            const scores = loadLocalData("scores");
+            
+            document.getElementById("adminTotalQuestions").innerText = questions.length;
+            document.getElementById("adminTotalStudents").innerText = students.length;
+            document.getElementById("adminTotalExams").innerText = scores.length;
+            
+            if(scores.length > 0) {
+                let avg = scores.reduce((sum, s) => sum + parseFloat(s.percentage), 0) / scores.length;
+                document.getElementById("adminAvgScore").innerText = avg.toFixed(1) + '%';
+                let passed = scores.filter(s => s.percentage >= 70).length;
+                document.getElementById("adminPassCount").innerText = passed;
+                document.getElementById("adminFailCount").innerText = scores.length - passed;
+                document.getElementById("adminPassRate").innerText = ((passed/scores.length)*100).toFixed(1) + '%';
+            }
+            
+            // Update student filter dropdown
+            let filter = document.getElementById("scoreFilter");
+            if (filter) {
+                filter.innerHTML = '<option value="all">All Students</option>';
+                students.forEach(s => {
+                    filter.innerHTML += `<option value="${s.username}">${s.username}</option>`;
+                });
+            }
+        }
+        
+        // ==================== LOCAL STORAGE FUNCTIONS ====================
+        function loadLocalData(type) {
+            return JSON.parse(localStorage.getItem(type) || "[]");
+        }
+        
+        function saveLocalData(type, data) {
+            localStorage.setItem(type, JSON.stringify(data));
+        }
+        
+        // ==================== NAVIGATION ====================
+        function showHomeSection() {
+            document.getElementById('homeSection').classList.remove('hidden');
+            document.getElementById('studentSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
+            updateHomeStats();
+        }
+        
+        function showStudentSection() {
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('studentSection').classList.remove('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
+            showStudentLoginSection();
+        }
+        
+        function showAdminSection() {
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('studentSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('hidden');
+            document.getElementById('adminLogin').classList.remove('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+        }
+        
+        function showStudentLoginSection() {
+            document.getElementById('studentLogin').classList.remove('hidden');
+            document.getElementById('studentRegister').classList.add('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+        }
+        
+        function showStudentRegister() {
+            document.getElementById('studentLogin').classList.add('hidden');
+            document.getElementById('studentRegister').classList.remove('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+        }
+        
+        function showStudentExam() {
+            document.getElementById('studentExamArea').classList.remove('hidden');
+            document.getElementById('studentHistoryArea').classList.add('hidden');
+            loadExam();
+        }
+        
+        function showStudentHistory() {
+            document.getElementById('studentExamArea').classList.add('hidden');
+            document.getElementById('studentHistoryArea').classList.remove('hidden');
+            loadStudentHistory();
+        }
+        
+        function showAdminTab(tabName, element) {
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            document.querySelectorAll('.admin-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(`admin${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).classList.remove('hidden');
+            if(tabName === 'questions') refreshQuestions();
+            if(tabName === 'scores') loadScoresTable();
+            if(tabName === 'students') loadStudentsList();
+            if(tabName === 'overview') updateAdminOverview();
+        }
+        
+        // ==================== STUDENT FUNCTIONS ====================
+        function registerUser() {
+            let students = loadLocalData("students");
+            let user = document.getElementById("regUser").value.trim();
+            let pass = document.getElementById("regPass").value.trim();
+            
+            if(!user || !pass) { alert("Enter username and password"); return; }
+            if(students.find(s => s.username === user)) { alert("Username exists"); return; }
+            
+            students.push({ username: user, password: pass, registered: new Date().toISOString() });
+            saveLocalData("students", students);
+            alert("✅ Registration successful!");
+            showStudentLoginSection();
+            updateHomeStats();
+            updateAdminOverview();
+        }
+        
+        async function studentLogin() {
+            let students = loadLocalData("students");
+            let user = document.getElementById("sUser").value.trim();
+            let pass = document.getElementById("sPass").value.trim();
+            
+            let student = students.find(s => s.username === user && s.password === pass);
+            
+            if(student) {
+                currentUser = user;
+                document.getElementById("studentName").innerText = user;
+                document.getElementById("studentLogin").classList.add('hidden');
+                document.getElementById("studentDashboard").classList.remove('hidden');
+                globalQuestions = await loadQuestionsFromSheet();
+                showStudentExam();
+            } else {
+                alert("❌ Invalid username or password");
+            }
+        }
+        
+        function loadStudentHistory() {
+            let scores = loadLocalData("scores");
+            let userScores = scores.filter(s => s.student === currentUser);
+            
+            let html = "";
+            if(userScores.length === 0) {
+                html = "<p style='text-align: center; padding: 20px;'>No exam history yet.</p>";
+            } else {
+                userScores.sort((a,b) => new Date(b.date) - new Date(a.date));
+                userScores.forEach((score, i) => {
+                    let resultClass = score.percentage >= 70 ? 'pass' : 'fail';
+                    html += `
+                        <div class="score-card">
+                            <div><strong>Exam #${userScores.length - i}</strong> - ${new Date(score.date).toLocaleString()}</div>
+                            <div>Score: ${score.score}/${score.total} (${score.percentage}%) <span class="${resultClass}">${score.percentage >= 70 ? 'PASS' : 'FAIL'}</span></div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById("studentHistoryList").innerHTML = html;
+        }
+        
+        // ==================== ADMIN FUNCTIONS ====================
+        function adminLogin() {
+            let user = document.getElementById("aUser").value;
+            let pass = document.getElementById("aPass").value;
+            
+            if(user === "admin" && pass === "tola@121212") {
+                document.getElementById("adminLogin").classList.add('hidden');
+                document.getElementById("adminDashboard").classList.remove('hidden');
+                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelector('.admin-tab').classList.add('active');
+                document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById('adminOverview').classList.remove('hidden');
+                refreshQuestions();
+                loadStudentsList();
+                updateAdminOverview();
+            } else {
+                alert("❌ Invalid admin credentials!");
+            }
+        }
+        
+        // ==================== EXAM FUNCTIONS ====================
+        function loadExam() {
+            if(!globalQuestions || globalQuestions.length === 0) {
+                document.getElementById("noQuestions").classList.remove('hidden');
+                document.getElementById("examContent").classList.add('hidden');
+                return;
+            }
+            
+            document.getElementById("noQuestions").classList.add('hidden');
+            document.getElementById("examContent").classList.remove('hidden');
+            
+            currentQuestion = 0;
+            answers = {};
+            examSubmitted = false;
+            currentExamId = Date.now();
+            globalQuestions.forEach((_, i) => answers[i] = null);
+            showQuestion();
+        }
+        
+        function showQuestion() {
+            let q = globalQuestions[currentQuestion];
+            if(!q) return;
+            
+            document.getElementById("questionCounter").innerHTML = `<span style="background: #4a90e2; color: white; padding: 8px 20px;">Question ${currentQuestion+1} of ${globalQuestions.length}</span>`;
+            document.getElementById("questionText").innerText = q.q;
+            
+            let html = "";
+            let letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                let selected = answers[currentQuestion] === opt ? 'selected' : '';
+                html += `<div onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')" style="margin: 10px 0; padding: 12px; background: white; border: 2px solid ${selected ? '#4a90e2' : '#eee'}; border-radius: 8px; cursor: pointer;">${letters[i]}. ${opt}</div>`;
+            });
+            document.getElementById("optionsContainer").innerHTML = html;
+            
+            let answered = Object.values(answers).filter(a => a !== null).length;
+            document.getElementById("progressText").innerHTML = `📊 ${answered}/${globalQuestions.length} Answered`;
+            
+            let dots = "";
+            globalQuestions.forEach((_, i) => {
+                let cls = "question-dot";
+                cls += answers[i] ? " answered" : " unanswered";
+                cls += i === currentQuestion ? " current" : "";
+                dots += `<span class="${cls}" onclick="jumpToQuestion(${i})">${i+1}</span>`;
+            });
+            document.getElementById("questionDots").innerHTML = dots;
+        }
+        
+        function selectAnswer(ans) {
+            if(!examSubmitted) {
+                answers[currentQuestion] = ans;
+                showQuestion();
+            }
+        }
+        
+        function jumpToQuestion(i) {
+            if(!examSubmitted) {
+                currentQuestion = i;
+                showQuestion();
+            }
+        }
+        
+        function nextQuestion() {
+            if(currentQuestion < globalQuestions.length-1) {
+                currentQuestion++;
+                showQuestion();
+            }
+        }
+        
+        function previousQuestion() {
+            if(currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+        
+        function submitExam() {
+            let score = 0;
+            globalQuestions.forEach((q, i) => {
+                if(answers[i] === q.answer) score++;
+            });
+            
+            let percent = (score/globalQuestions.length)*100;
+            examSubmitted = true;
+            
+            let scores = loadLocalData("scores");
+            scores.push({
+                id: currentExamId,
+                student: currentUser,
+                date: new Date().toISOString(),
+                score: score,
+                total: globalQuestions.length,
+                percentage: percent.toFixed(1)
+            });
+            saveLocalData("scores", scores);
+            
+            document.getElementById("result").innerHTML = `
+                <div style="background: ${percent>=70 ? '#d4edda' : '#f8d7da'}; padding: 20px; border-radius: 8px; text-align: center;">
+                    <h2>${percent>=70 ? '✅ PASSED!' : '❌ FAILED!'}</h2>
+                    <p style="font-size: 2em;">${score}/${globalQuestions.length} (${percent.toFixed(1)}%)</p>
+                </div>
+            `;
+            showQuestion();
+            updateHomeStats();
+            updateAdminOverview();
+        }
+        
+        async function updateHomeStats() {
+            const questions = await loadQuestionsFromSheet();
+            const students = loadLocalData("students");
+            const scores = loadLocalData("scores");
+            
+            document.getElementById("homeTotalQuestions").innerText = questions.length;
+            document.getElementById("homeTotalStudents").innerText = students.length;
+            document.getElementById("homeTotalExams").innerText = scores.length;
+        }
+        
+        function logout() {
+            if(confirm("Logout?")) location.reload();
+        }
+        
+        // Initialize
+        loadQuestionsFromSheet();
+        updateHomeStats();
+    </script>
+</body>
+</html>
