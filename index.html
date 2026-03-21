@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AYER AMBA ONLINE EXAM - Full Admin Controls</title>
+    <title>AYER AMBA ONLINE EXAM - Complete System</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -44,7 +44,6 @@
         .btn-danger { background: #e74c3c; color: white; }
         .btn-info { background: #3498db; color: white; }
         .btn-purple { background: #9b59b6; color: white; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
         input, select, textarea { 
             width: 100%; 
@@ -108,13 +107,6 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        .question-content {
-            flex: 1;
-        }
-        .question-actions {
-            display: flex;
-            gap: 10px;
-        }
         
         .student-card {
             background: white;
@@ -124,7 +116,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
         
         .score-card {
@@ -227,17 +218,32 @@
             flex-wrap: wrap;
         }
         
-        .question-id {
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        .google-sheet-badge {
+            background: #0f9d58;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
             font-size: 12px;
-            color: #666;
-            margin-top: 5px;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🏫 AYER AMBA ONLINE EXAM TRAINING CENTER</h1>
-        <p>Google Sheets Sync - Add, Delete, Manage Everything!</p>
+        <p>Google Sheets Sync - Questions & Scores Management</p>
     </div>
     
     <div class="container">
@@ -270,10 +276,12 @@
                 </div>
                 
                 <div style="background: #f0f0f0; padding: 20px; border-radius: 8px;">
-                    <p><strong>🔐 Admin Login:</strong> username: <code>admin</code> / password: <code>tola@121212</code></p>
+                    <p><strong>🔐 Admin Login:</strong> username: <code></code> / password: <code></code></p>
                     <p><strong>👨‍🎓 Student:</strong> Register new account or login with existing</p>
-                    <p style="color: #1abc9c;">✅ <strong>Full Admin Controls:</strong> Add, delete questions, manage students, view all scores!</p>
-                </div>
+            
+                
+				<p><strong>🔐 DEVELOPED BY TOLA GALATA AYANSA:</strong> username: <code>@tolahep</code> / PHONE: <code>+251976761165</code></p>
+				</div>
             </div>
 
             <!-- STUDENT SECTION -->
@@ -335,8 +343,8 @@
             <div id="adminSection" class="hidden">
                 <div id="adminLogin" class="login-container">
                     <h2>👨‍💼 Admin Login</h2>
-                    <input type="text" id="aUser" value="admin">
-                    <input type="password" id="aPass" value="tola@121212">
+                    <input type="text" id="aUser" value="">
+                    <input type="password" id="aPass" value="">
                     <button class="btn btn-warning" onclick="adminLogin()">Login</button>
                     <button class="btn" onclick="showHomeSection()">Back</button>
                 </div>
@@ -349,7 +357,7 @@
                         <div class="admin-tab" onclick="showAdminTab('upload', this)">📁 Upload File</div>
                         <div class="admin-tab" onclick="showAdminTab('questions', this)">📋 Questions</div>
                         <div class="admin-tab" onclick="showAdminTab('students', this)">👥 Students</div>
-                        <div class="admin-tab" onclick="showAdminTab('scores', this)">📈 Scores</div>
+                        <div class="admin-tab" onclick="showAdminTab('scores', this)">📈 Scores <span class="google-sheet-badge">Google Sheets</span></div>
                     </div>
 
                     <!-- Overview Tab -->
@@ -360,11 +368,6 @@
                             <div class="stat-card"><div class="stat-number" id="adminTotalStudents">0</div><div>Students</div></div>
                             <div class="stat-card"><div class="stat-number" id="adminTotalExams">0</div><div>Exams</div></div>
                             <div class="stat-card"><div class="stat-number" id="adminAvgScore">0%</div><div>Avg Score</div></div>
-                        </div>
-                        <div class="stats-grid">
-                            <div class="stat-card" style="background: #27ae60;"><div class="stat-number" id="adminPassCount">0</div><div>Passed</div></div>
-                            <div class="stat-card" style="background: #e74c3c;"><div class="stat-number" id="adminFailCount">0</div><div>Failed</div></div>
-                            <div class="stat-card" style="background: #f39c12;"><div class="stat-number" id="adminPassRate">0%</div><div>Pass Rate</div></div>
                         </div>
                     </div>
 
@@ -384,7 +387,7 @@
                                 <option value="C">C</option>
                                 <option value="D">D</option>
                             </select>
-                            <button class="btn btn-success" id="addButton" onclick="addQuestionToSheet()" style="width: 100%;">📤 Add Question to Google Sheets</button>
+                            <button class="btn btn-success" id="addButton" onclick="addQuestionToSheet()">📤 Add Question to Google Sheets</button>
                         </div>
                         <div id="addMessage" style="margin-top: 10px;"></div>
                     </div>
@@ -394,21 +397,6 @@
                         <h3>📁 Upload Questions File</h3>
                         <div class="upload-area">
                             <p><strong>File Format:</strong> .txt file with Q:/A:/B:/C:/D:/ANS: (blank line between questions)</p>
-                            <p><strong>Example:</strong></p>
-                            <pre style="background: #f0f0f0; padding: 10px; border-radius: 5px; font-size: 12px;">
-Q: What is the capital of France?
-A: London
-B: Berlin
-C: Paris
-D: Madrid
-ANS: C
-
-Q: What is 15 + 6?
-A: 19
-B: 20
-C: 21
-D: 22
-ANS: C</pre>
                             <input type="file" id="fileInput" accept=".txt">
                             <div class="button-group">
                                 <button class="btn btn-success" onclick="uploadFileToSheet(true)">📤 Upload & Replace All</button>
@@ -433,10 +421,10 @@ ANS: C</pre>
                     <div id="adminStudents" class="admin-content hidden">
                         <h3>👥 Manage Students</h3>
                         <div class="search-box">
-                            <input type="text" id="studentSearch" placeholder="Search students by username..." onkeyup="searchStudents()">
+                            <input type="text" id="studentSearch" placeholder="Search students..." onkeyup="searchStudents()">
                         </div>
                         <div class="button-group">
-                            <button class="btn btn-danger" onclick="deleteAllStudents()">🗑️ Delete ALL Students & Scores</button>
+                            <button class="btn btn-danger" onclick="deleteAllStudents()">🗑️ Delete ALL Students</button>
                             <button class="btn btn-primary" onclick="loadStudentsList()">🔄 Refresh</button>
                         </div>
                         <div id="studentList"></div>
@@ -444,30 +432,21 @@ ANS: C</pre>
 
                     <!-- Scores Tab -->
                     <div id="adminScores" class="admin-content hidden">
-                        <h3>📈 All Exam Scores</h3>
+                        <h3>📈 All Exam Scores (from Google Sheets)</h3>
                         <div class="search-box">
-                            <input type="text" id="scoreSearch" placeholder="Search by student name..." onkeyup="filterScores()">
+                            <input type="text" id="scoreSearch" placeholder="Search by student..." onkeyup="filterScores()">
                             <select id="scoreFilter" onchange="filterScores()">
                                 <option value="all">All Students</option>
                             </select>
+                            <button class="btn btn-primary" onclick="loadScoresFromSheet()">🔄 Refresh from Google Sheets</button>
                         </div>
                         <div class="table-container">
-                            <table style="width:100%">
+                            <table>
                                 <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Date & Time</th>
-                                        <th>Score</th>
-                                        <th>Percentage</th>
-                                        <th>Result</th>
-                                        <th>Action</th>
-                                    </thead>
+                                    <tr><th>Username</th><th>Score</th><th>Total</th><th>Percentage</th><th>Status</th><th>Date</th></tr>
+                                </thead>
                                 <tbody id="scoresTableBody"></tbody>
                             </table>
-                        </div>
-                        <div class="button-group">
-                            <button class="btn btn-danger" onclick="deleteAllScores()">🗑️ Delete ALL Scores</button>
-                            <button class="btn btn-primary" onclick="loadScoresTable()">🔄 Refresh</button>
                         </div>
                     </div>
 
@@ -479,46 +458,36 @@ ANS: C</pre>
 
     <script>
         // ==================== YOUR GOOGLE APPS SCRIPT URL ====================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZhkw0tdZJVh7KQEKa9TSUitWhf86_KP4__zxNCfSr0Dd-fT3ia7dtRI3_Ok-wSS0/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzwwWiSsn6OAHYhAkIsLLg0Ef8qZKlBsqI7Uk6uAgtTchKcEvpwxO9ufD3dXfoog/exec";
         
         // ==================== GLOBAL VARIABLES ====================
         let currentUser = "";
+        let currentUserPassword = "";
         let currentQuestion = 0;
         let answers = {};
         let examSubmitted = false;
-        let currentExamId = null;
         let globalQuestions = [];
+        let allScores = [];
         let isAdding = false;
         
         // ==================== GOOGLE SHEETS API FUNCTIONS ====================
         
         async function loadQuestionsFromSheet() {
             try {
-                document.getElementById("syncStatus").innerHTML = "🔄 Loading questions from Google Sheets...";
+                document.getElementById("syncStatus").innerHTML = "🔄 Loading questions...";
                 const response = await fetch(SCRIPT_URL);
                 const questions = await response.json();
-                
                 globalQuestions = questions;
-                localStorage.setItem("cachedQuestions", JSON.stringify(questions));
-                document.getElementById("syncStatus").innerHTML = `✅ Loaded ${questions.length} questions from Google Sheets`;
+                document.getElementById("syncStatus").innerHTML = `✅ Loaded ${questions.length} questions`;
                 return questions;
             } catch (error) {
-                console.error("Error loading:", error);
-                document.getElementById("syncStatus").innerHTML = "⚠️ Error loading. Using cached data.";
-                const cached = localStorage.getItem("cachedQuestions");
-                if (cached) {
-                    globalQuestions = JSON.parse(cached);
-                    return globalQuestions;
-                }
+                document.getElementById("syncStatus").innerHTML = "⚠️ Error loading questions";
                 return [];
             }
         }
         
         async function addQuestionToSheet() {
-            if (isAdding) {
-                document.getElementById("addMessage").innerHTML = '<span style="color: orange;">⏳ Please wait, already adding...</span>';
-                return;
-            }
+            if (isAdding) return;
             
             const question = document.getElementById("newQuestion").value.trim();
             const optA = document.getElementById("optA").value.trim();
@@ -539,7 +508,7 @@ ANS: C</pre>
             else if (correctLetter === "D") correctAnswer = optD;
             
             isAdding = true;
-            document.getElementById("addMessage").innerHTML = '<span style="color: blue;">📤 Adding to Google Sheets...</span>';
+            document.getElementById("addMessage").innerHTML = '<span style="color: blue;">📤 Adding...</span>';
             document.getElementById("addButton").disabled = true;
             
             try {
@@ -548,142 +517,127 @@ ANS: C</pre>
                 const result = await response.json();
                 
                 if (result.success) {
-                    document.getElementById("addMessage").innerHTML = '<span style="color: green;">✅ Question added successfully!</span>';
+                    document.getElementById("addMessage").innerHTML = '<span style="color: green;">✅ Question added!</span>';
                     document.getElementById("newQuestion").value = "";
                     document.getElementById("optA").value = "";
                     document.getElementById("optB").value = "";
                     document.getElementById("optC").value = "";
                     document.getElementById("optD").value = "";
                     document.getElementById("correctAnswer").value = "";
-                    setTimeout(() => refreshQuestions(), 1000);
-                    updateAdminOverview();
+                    refreshQuestions();
                 } else {
-                    document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Error adding question: ' + (result.message || 'Unknown') + '</span>';
+                    document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Error adding</span>';
                 }
             } catch (error) {
-                document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Error connecting to server</span>';
+                document.getElementById("addMessage").innerHTML = '<span style="color: red;">❌ Connection error</span>';
             } finally {
                 isAdding = false;
                 document.getElementById("addButton").disabled = false;
-                setTimeout(() => {
-                    if (document.getElementById("addMessage").innerHTML.includes("success")) {
-                        document.getElementById("addMessage").innerHTML = "";
-                    }
-                }, 3000);
+                setTimeout(() => { document.getElementById("addMessage").innerHTML = ""; }, 2000);
             }
         }
         
-        // ==================== DELETE FUNCTIONS ====================
-        
+        // Delete single question
         async function deleteSingleQuestion(questionId) {
-            if (!confirm(`Delete this question? This cannot be undone!`)) return;
+            if (!confirm("Delete this question?")) return;
             
             try {
                 let questions = await loadQuestionsFromSheet();
-                let updatedQuestions = questions.filter((q, index) => index !== questionId);
+                let updatedQuestions = questions.filter((_, index) => index !== questionId);
                 
                 await clearAllQuestionsFromSheet();
                 
                 for (let q of updatedQuestions) {
                     const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.q)}&optA=${encodeURIComponent(q.options[0])}&optB=${encodeURIComponent(q.options[1])}&optC=${encodeURIComponent(q.options[2])}&optD=${encodeURIComponent(q.options[3])}&answer=${encodeURIComponent(q.answer)}`;
                     await fetch(url);
-                    await new Promise(resolve => setTimeout(resolve, 50));
+                    await new Promise(r => setTimeout(r, 50));
                 }
                 
-                alert(`✅ Question deleted successfully! Remaining: ${updatedQuestions.length} questions`);
-                await refreshQuestions();
-                await updateAdminOverview();
-                
+                alert(`✅ Question deleted! Remaining: ${updatedQuestions.length}`);
+                refreshQuestions();
             } catch (error) {
-                console.error("Error deleting question:", error);
-                alert("❌ Error deleting question. Please try again.");
+                alert("❌ Error deleting");
             }
         }
         
+        // Delete all questions
         async function deleteAllQuestions() {
-            if (!confirm("⚠️ Delete ALL questions from Google Sheets? This cannot be undone!")) return;
-            
-            try {
-                await clearAllQuestionsFromSheet();
-                alert("✅ All questions deleted successfully!");
-                await refreshQuestions();
-                await updateAdminOverview();
-            } catch (error) {
-                alert("❌ Error deleting questions");
-            }
+            if (!confirm("⚠️ Delete ALL questions?")) return;
+            await clearAllQuestionsFromSheet();
+            alert("✅ All questions deleted!");
+            refreshQuestions();
         }
         
         async function clearAllQuestionsFromSheet() {
+            const url = `${SCRIPT_URL}?action=delete`;
+            await fetch(url);
+        }
+        
+        // Load scores
+        async function loadScoresFromSheet() {
             try {
-                const url = `${SCRIPT_URL}?action=delete`;
-                await fetch(url);
+                const url = `${SCRIPT_URL}?action=getScores`;
+                const response = await fetch(url);
+                const scores = await response.json();
+                allScores = scores;
+                displayScoresTable();
+                return scores;
             } catch (error) {
-                console.error("Error clearing questions:", error);
+                return [];
             }
         }
         
-        // ==================== STUDENT DELETE FUNCTIONS ====================
-        
-        function deleteSingleStudent(index) {
-            if (confirm("Delete this student? All their scores will also be deleted.")) {
-                let students = loadLocalData("students");
-                let scores = loadLocalData("scores");
-                let username = students[index].username;
-                students.splice(index, 1);
-                let newScores = scores.filter(s => s.student !== username);
-                saveLocalData("students", students);
-                saveLocalData("scores", newScores);
-                loadStudentsList();
-                updateAdminOverview();
-                updateHomeStats();
-                alert(`✅ Student deleted!`);
-            }
-        }
-        
-        function deleteAllStudents() {
-            if (confirm("⚠️ Delete ALL students and their scores? This cannot be undone!")) {
-                saveLocalData("students", []);
-                saveLocalData("scores", []);
-                loadStudentsList();
-                loadScoresTable();
-                updateAdminOverview();
-                updateHomeStats();
-                alert("✅ All students and scores deleted!");
-            }
-        }
-        
-        function deleteAllScores() {
-            if (confirm("⚠️ Delete ALL score records? This cannot be undone!")) {
-                saveLocalData("scores", []);
-                loadScoresTable();
-                updateAdminOverview();
-                updateHomeStats();
-                alert("✅ All scores deleted!");
-            }
-        }
-        
-        function deleteSingleScore(index) {
-            if (confirm("Delete this score record?")) {
-                let scores = loadLocalData("scores");
-                scores.splice(index, 1);
-                saveLocalData("scores", scores);
-                loadScoresTable();
-                updateAdminOverview();
-                updateHomeStats();
-                alert("✅ Score deleted!");
-            }
-        }
-        
-        // ==================== FILE UPLOAD ====================
-        
-        async function uploadFileToSheet(replace) {
-            const fileInput = document.getElementById("fileInput");
-            const file = fileInput.files[0];
+        function displayScoresTable() {
+            let filter = document.getElementById("scoreFilter")?.value || "all";
+            let searchTerm = document.getElementById("scoreSearch")?.value.toLowerCase() || "";
             
-            if (!file) {
-                alert("Please select a .txt file first");
-                return;
+            let filteredScores = allScores.filter(s => {
+                let matchFilter = filter === "all" || s.username === filter;
+                let matchSearch = s.username.toLowerCase().includes(searchTerm);
+                return matchFilter && matchSearch;
+            });
+            
+            let tbody = document.getElementById("scoresTableBody");
+            if (!tbody) return;
+            
+            if (filteredScores.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No scores found</td></tr>';
+            } else {
+                tbody.innerHTML = "";
+                filteredScores.forEach((score) => {
+                    let resultClass = parseFloat(score.percentage) >= 70 ? 'pass' : 'fail';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${escapeHtml(score.username)}</strong></td>
+                            <td>${score.score}</td>
+                            <td>${score.total}</td>
+                            <td>${score.percentage}</td>
+                            <td class="${resultClass}">${score.status || (parseFloat(score.percentage) >= 70 ? 'PASS' : 'FAIL')}</td>
+                            <td>${new Date(score.examDate).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                });
             }
+        }
+        
+        function filterScores() { displayScoresTable(); }
+        
+        // Save score
+        async function saveScoreToSheet(username, password, score, total, percentage, status) {
+            try {
+                const url = `${SCRIPT_URL}?action=submitScore&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&score=${score}&total=${total}&percentage=${percentage}&status=${encodeURIComponent(status)}`;
+                const response = await fetch(url);
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // File upload
+        async function uploadFileToSheet(replace) {
+            const file = document.getElementById("fileInput").files[0];
+            if (!file) { alert("Select a .txt file"); return; }
             
             const progressDiv = document.getElementById("uploadProgress");
             progressDiv.innerHTML = '<span style="color: blue;">📖 Reading file...</span>';
@@ -692,16 +646,12 @@ ANS: C</pre>
             reader.onload = async function(e) {
                 const text = e.target.result;
                 const blocks = text.split(/\n\s*\n/);
-                let added = 0;
-                let errors = 0;
                 let questionsToAdd = [];
                 
                 for (let block of blocks) {
                     if (!block.trim()) continue;
-                    
                     const lines = block.split('\n');
                     let q = "", opts = [], ans = "";
-                    
                     for (let line of lines) {
                         line = line.trim();
                         if (line.startsWith("Q:")) q = line.substring(2).trim();
@@ -711,106 +661,52 @@ ANS: C</pre>
                         else if (line.startsWith("D:")) opts[3] = line.substring(2).trim();
                         else if (line.startsWith("ANS:")) ans = line.substring(4).trim().toUpperCase();
                     }
-                    
-                    if (q && opts.length === 4 && opts.every(o => o) && ans) {
+                    if (q && opts.length === 4) {
                         let idx = "ABCD".indexOf(ans);
                         if (idx !== -1 && opts[idx]) {
-                            questionsToAdd.push({
-                                question: q,
-                                optA: opts[0],
-                                optB: opts[1],
-                                optC: opts[2],
-                                optD: opts[3],
-                                answer: opts[idx]
-                            });
-                            added++;
-                        } else {
-                            errors++;
+                            questionsToAdd.push({ question: q, optA: opts[0], optB: opts[1], optC: opts[2], optD: opts[3], answer: opts[idx] });
                         }
-                    } else {
-                        errors++;
                     }
                 }
                 
-                if (replace) {
-                    progressDiv.innerHTML = '<span style="color: blue;">🗑️ Clearing existing questions...</span>';
-                    await clearAllQuestionsFromSheet();
-                }
-                
-                progressDiv.innerHTML = `<span style="color: blue;">📤 Uploading ${added} questions...</span>`;
+                if (replace) await clearAllQuestionsFromSheet();
                 
                 let successCount = 0;
                 for (let i = 0; i < questionsToAdd.length; i++) {
                     const q = questionsToAdd[i];
-                    const percent = Math.round((i + 1) / questionsToAdd.length * 100);
-                    progressDiv.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;">${percent}%</div></div><span>Uploading ${i+1}/${questionsToAdd.length}...</span>`;
-                    
-                    try {
-                        const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.question)}&optA=${encodeURIComponent(q.optA)}&optB=${encodeURIComponent(q.optB)}&optC=${encodeURIComponent(q.optC)}&optD=${encodeURIComponent(q.optD)}&answer=${encodeURIComponent(q.answer)}`;
-                        const response = await fetch(url);
-                        const result = await response.json();
-                        if (result.success) successCount++;
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    } catch (err) {
-                        console.error("Error uploading:", err);
-                    }
-                }
-                
-                progressDiv.innerHTML = `<span style="color: green;">✅ Complete! Added ${successCount} questions. ${errors} errors.</span>`;
-                setTimeout(() => {
-                    progressDiv.innerHTML = "";
-                    refreshQuestions();
-                    updateAdminOverview();
-                }, 3000);
-                
-                fileInput.value = "";
-            };
-            
-            reader.readAsText(file);
-        }
-        
-        async function loadSampleQuestions() {
-            const sampleQuestions = [
-                {question: "What is the capital of France?", optA: "London", optB: "Berlin", optC: "Paris", optD: "Madrid", answer: "Paris"},
-                {question: "Which planet is known as the Red Planet?", optA: "Venus", optB: "Mars", optC: "Jupiter", optD: "Saturn", answer: "Mars"},
-                {question: "What is 15 + 6?", optA: "19", optB: "20", optC: "21", optD: "22", answer: "21"},
-                {question: "Who wrote Romeo and Juliet?", optA: "Dickens", optB: "Shakespeare", optC: "Twain", optD: "Austen", answer: "Shakespeare"},
-                {question: "What is the chemical symbol for water?", optA: "CO2", optB: "O2", optC: "H2O", optD: "NaCl", answer: "H2O"},
-                {question: "How many continents are there?", optA: "5", optB: "6", optC: "7", optD: "8", answer: "7"},
-                {question: "What is the largest ocean?", optA: "Atlantic", optB: "Indian", optC: "Arctic", optD: "Pacific", answer: "Pacific"},
-                {question: "Who painted the Mona Lisa?", optA: "Van Gogh", optB: "Picasso", optC: "Da Vinci", optD: "Michelangelo", answer: "Da Vinci"},
-                {question: "What is the square root of 64?", optA: "6", optB: "7", optC: "8", optD: "9", answer: "8"},
-                {question: "Which animal is king of the jungle?", optA: "Elephant", optB: "Tiger", optC: "Lion", optD: "Giraffe", answer: "Lion"}
-            ];
-            
-            const progressDiv = document.getElementById("uploadProgress");
-            progressDiv.innerHTML = '<span style="color: blue;">📤 Loading sample questions...</span>';
-            
-            await clearAllQuestionsFromSheet();
-            
-            let successCount = 0;
-            for (let i = 0; i < sampleQuestions.length; i++) {
-                const q = sampleQuestions[i];
-                const percent = Math.round((i + 1) / sampleQuestions.length * 100);
-                progressDiv.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;">${percent}%</div></div><span>Loading ${i+1}/${sampleQuestions.length}...</span>`;
-                
-                try {
+                    const percent = Math.round((i+1)/questionsToAdd.length*100);
+                    progressDiv.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;">${percent}%</div></div>`;
                     const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.question)}&optA=${encodeURIComponent(q.optA)}&optB=${encodeURIComponent(q.optB)}&optC=${encodeURIComponent(q.optC)}&optD=${encodeURIComponent(q.optD)}&answer=${encodeURIComponent(q.answer)}`;
                     const response = await fetch(url);
                     const result = await response.json();
                     if (result.success) successCount++;
-                    await new Promise(resolve => setTimeout(resolve, 50));
-                } catch (err) {
-                    console.error("Error loading sample:", err);
+                    await new Promise(r => setTimeout(r, 50));
                 }
-            }
+                
+                progressDiv.innerHTML = `<span style="color: green;">✅ Added ${successCount} questions!</span>`;
+                setTimeout(() => { progressDiv.innerHTML = ""; refreshQuestions(); }, 2000);
+                document.getElementById("fileInput").value = "";
+            };
+            reader.readAsText(file);
+        }
+        
+        async function loadSampleQuestions() {
+            const samples = [
+                {question: "What is the capital of France?", optA: "London", optB: "Berlin", optC: "Paris", optD: "Madrid", answer: "Paris"},
+                {question: "Which planet is known as the Red Planet?", optA: "Venus", optB: "Mars", optC: "Jupiter", optD: "Saturn", answer: "Mars"},
+                {question: "What is 15 + 6?", optA: "19", optB: "20", optC: "21", optD: "22", answer: "21"},
+                {question: "Who wrote Romeo and Juliet?", optA: "Dickens", optB: "Shakespeare", optC: "Twain", optD: "Austen", answer: "Shakespeare"},
+                {question: "What is H2O?", optA: "CO2", optB: "O2", optC: "Water", optD: "Salt", answer: "Water"}
+            ];
             
-            progressDiv.innerHTML = `<span style="color: green;">✅ Loaded ${successCount} sample questions!</span>`;
-            setTimeout(() => {
-                progressDiv.innerHTML = "";
-                refreshQuestions();
-                updateAdminOverview();
-            }, 2000);
+            await clearAllQuestionsFromSheet();
+            for (let q of samples) {
+                const url = `${SCRIPT_URL}?action=add&question=${encodeURIComponent(q.question)}&optA=${encodeURIComponent(q.optA)}&optB=${encodeURIComponent(q.optB)}&optC=${encodeURIComponent(q.optC)}&optD=${encodeURIComponent(q.optD)}&answer=${encodeURIComponent(q.answer)}`;
+                await fetch(url);
+                await new Promise(r => setTimeout(r, 50));
+            }
+            alert("✅ Sample questions loaded!");
+            refreshQuestions();
         }
         
         // ==================== DISPLAY FUNCTIONS ====================
@@ -821,171 +717,33 @@ ANS: C</pre>
             if (!qList) return;
             
             if (questions.length === 0) {
-                qList.innerHTML = "<p>No questions yet. Upload a file or add a question!</p>";
+                qList.innerHTML = "<p>No questions yet.</p>";
             } else {
                 let html = "";
                 questions.forEach((q, i) => {
                     html += `
                         <div class="question-card">
-                            <div class="question-content">
-                                <strong>Q${i+1}: ${q.q}</strong><br>
-                                A: ${q.options[0]}<br>
-                                B: ${q.options[1]}<br>
-                                C: ${q.options[2]}<br>
-                                D: ${q.options[3]}<br>
-                                <span style="color: #27ae60;">✓ Answer: ${q.answer}</span>
-                            </div>
-                            <div class="question-actions">
-                                <button class="btn btn-danger" onclick="deleteSingleQuestion(${i})" style="padding: 5px 15px;">🗑️ Delete</button>
-                            </div>
+                            <div><strong>Q${i+1}: ${q.q}</strong><br>
+                            A: ${q.options[0]} | B: ${q.options[1]} | C: ${q.options[2]} | D: ${q.options[3]}<br>
+                            <span style="color: #27ae60;">✓ Answer: ${q.answer}</span></div>
+                            <button class="delete-btn" onclick="deleteSingleQuestion(${i})">🗑️ Delete</button>
                         </div>
                     `;
                 });
                 qList.innerHTML = html;
             }
-            updateHomeStats();
+            updateStats();
         }
         
-        async function loadStudentsList() {
-            let students = loadLocalData("students");
-            let searchTerm = document.getElementById("studentSearch")?.value.toLowerCase() || "";
-            let filteredStudents = students.filter(s => s.username.toLowerCase().includes(searchTerm));
-            
-            let sList = document.getElementById("studentList");
-            if (!sList) return;
-            
-            if (filteredStudents.length === 0) {
-                sList.innerHTML = "<p>No students found.</p>";
-            } else {
-                let html = "";
-                filteredStudents.forEach((s) => {
-                    let actualIndex = students.findIndex(st => st.username === s.username);
-                    html += `
-                        <div class="student-card">
-                            <div>
-                                <strong>${escapeHtml(s.username)}</strong><br>
-                                <small>📅 Registered: ${new Date(s.registered).toLocaleDateString()}</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-info" onclick="viewStudentScores('${escapeHtml(s.username)}')" style="padding: 5px 15px;">📊 Scores</button>
-                                <button class="btn btn-danger" onclick="deleteSingleStudent(${actualIndex})" style="padding: 5px 15px;">🗑️ Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                sList.innerHTML = html;
-            }
-        }
-        
-        function escapeHtml(text) {
-            return text.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-        
-        function searchStudents() {
-            loadStudentsList();
-        }
-        
-        function viewStudentScores(username) {
-            document.getElementById("scoreFilter").value = username;
-            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.admin-tab')[5].classList.add('active');
-            document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById('adminScores').classList.remove('hidden');
-            loadScoresTable();
-        }
-        
-        async function loadScoresTable() {
-            let scores = loadLocalData("scores");
-            let filter = document.getElementById("scoreFilter")?.value || "all";
-            let searchTerm = document.getElementById("scoreSearch")?.value.toLowerCase() || "";
-            
-            let filteredScores = scores.filter(s => {
-                let matchFilter = filter === "all" || s.student === filter;
-                let matchSearch = s.student.toLowerCase().includes(searchTerm);
-                return matchFilter && matchSearch;
-            });
-            filteredScores.sort((a,b) => new Date(b.date) - new Date(a.date));
-            
-            let tbody = document.getElementById("scoresTableBody");
-            if (!tbody) return;
-            
-            if (filteredScores.length === 0) {
-                tbody.innerHTML = '叭<td colspan="6" style="text-align: center;">No scores found</td> </tr>';
-            } else {
-                tbody.innerHTML = "";
-                filteredScores.forEach((score) => {
-                    let originalIndex = scores.findIndex(s => s.id === score.id);
-                    let resultClass = score.percentage >= 70 ? 'pass' : 'fail';
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong>${escapeHtml(score.student)}</strong></td>
-                            <td>${new Date(score.date).toLocaleString()}</td>
-                            <td>${score.score}/${score.total}</td>
-                            <td>${score.percentage}%</td>
-                            <td class="${resultClass}">${score.percentage >= 70 ? '✅ PASS' : '❌ FAIL'}</td>
-                            <td><button class="btn btn-danger" onclick="deleteSingleScore(${originalIndex})" style="padding: 5px 10px;">Delete</button></td>
-                        </tr>
-                    `;
-                });
-            }
-        }
-        
-        function filterScores() {
-            loadScoresTable();
-        }
-        
-        async function updateAdminOverview() {
-            const questions = await loadQuestionsFromSheet();
-            const students = loadLocalData("students");
-            const scores = loadLocalData("scores");
-            
-            document.getElementById("adminTotalQuestions").innerText = questions.length;
-            document.getElementById("adminTotalStudents").innerText = students.length;
-            document.getElementById("adminTotalExams").innerText = scores.length;
-            
-            if(scores.length > 0) {
-                let avg = scores.reduce((sum, s) => sum + parseFloat(s.percentage), 0) / scores.length;
-                document.getElementById("adminAvgScore").innerText = avg.toFixed(1) + '%';
-                let passed = scores.filter(s => s.percentage >= 70).length;
-                document.getElementById("adminPassCount").innerText = passed;
-                document.getElementById("adminFailCount").innerText = scores.length - passed;
-                document.getElementById("adminPassRate").innerText = ((passed/scores.length)*100).toFixed(1) + '%';
-            } else {
-                document.getElementById("adminAvgScore").innerText = '0%';
-                document.getElementById("adminPassCount").innerText = '0';
-                document.getElementById("adminFailCount").innerText = '0';
-                document.getElementById("adminPassRate").innerText = '0%';
-            }
-            
-            let filter = document.getElementById("scoreFilter");
-            if (filter) {
-                filter.innerHTML = '<option value="all">All Students</option>';
-                students.forEach(s => {
-                    filter.innerHTML += `<option value="${escapeHtml(s.username)}">${escapeHtml(s.username)}</option>`;
-                });
-            }
-        }
-        
-        // ==================== LOCAL STORAGE FUNCTIONS ====================
-        function loadLocalData(type) {
-            return JSON.parse(localStorage.getItem(type) || "[]");
-        }
-        
-        function saveLocalData(type, data) {
-            localStorage.setItem(type, JSON.stringify(data));
-        }
+        // ==================== LOCAL STORAGE ====================
+        function loadLocalData(type) { return JSON.parse(localStorage.getItem(type) || "[]"); }
+        function saveLocalData(type, data) { localStorage.setItem(type, JSON.stringify(data)); }
         
         // ==================== NAVIGATION ====================
         function showHomeSection() {
             document.getElementById('homeSection').classList.remove('hidden');
             document.getElementById('studentSection').classList.add('hidden');
             document.getElementById('adminSection').classList.add('hidden');
-            updateHomeStats();
         }
         
         function showStudentSection() {
@@ -1028,14 +786,13 @@ ANS: C</pre>
         }
         
         function showAdminTab(tabName, element) {
-            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
-            document.querySelectorAll('.admin-content').forEach(content => content.classList.add('hidden'));
+            document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
             document.getElementById(`admin${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).classList.remove('hidden');
             if(tabName === 'questions') refreshQuestions();
-            if(tabName === 'scores') loadScoresTable();
+            if(tabName === 'scores') loadScoresFromSheet();
             if(tabName === 'students') loadStudentsList();
-            if(tabName === 'overview') updateAdminOverview();
         }
         
         // ==================== STUDENT FUNCTIONS ====================
@@ -1043,54 +800,40 @@ ANS: C</pre>
             let students = loadLocalData("students");
             let user = document.getElementById("regUser").value.trim();
             let pass = document.getElementById("regPass").value.trim();
-            
             if(!user || !pass) { alert("Enter username and password"); return; }
             if(students.find(s => s.username === user)) { alert("Username exists"); return; }
-            
             students.push({ username: user, password: pass, registered: new Date().toISOString() });
             saveLocalData("students", students);
             alert("✅ Registration successful!");
             showStudentLoginSection();
-            updateHomeStats();
-            updateAdminOverview();
+            updateStats();
         }
         
         async function studentLogin() {
             let students = loadLocalData("students");
             let user = document.getElementById("sUser").value.trim();
             let pass = document.getElementById("sPass").value.trim();
-            
             let student = students.find(s => s.username === user && s.password === pass);
-            
             if(student) {
                 currentUser = user;
+                currentUserPassword = pass;
                 document.getElementById("studentName").innerText = user;
                 document.getElementById("studentLogin").classList.add('hidden');
                 document.getElementById("studentDashboard").classList.remove('hidden');
                 globalQuestions = await loadQuestionsFromSheet();
                 showStudentExam();
-            } else {
-                alert("❌ Invalid username or password");
-            }
+            } else { alert("❌ Invalid login"); }
         }
         
         function loadStudentHistory() {
-            let scores = loadLocalData("scores");
-            let userScores = scores.filter(s => s.student === currentUser);
-            
+            let userScores = allScores.filter(s => s.username === currentUser);
             let html = "";
-            if(userScores.length === 0) {
-                html = "<p style='text-align: center; padding: 20px;'>No exam history yet.</p>";
-            } else {
-                userScores.sort((a,b) => new Date(b.date) - new Date(a.date));
+            if(userScores.length === 0) { html = "<p>No exam history yet.</p>"; }
+            else {
                 userScores.forEach((score, i) => {
-                    let resultClass = score.percentage >= 70 ? 'pass' : 'fail';
-                    html += `
-                        <div class="score-card">
-                            <div><strong>Exam #${userScores.length - i}</strong> - ${new Date(score.date).toLocaleString()}</div>
-                            <div>Score: ${score.score}/${score.total} (${score.percentage}%) <span class="${resultClass}">${score.percentage >= 70 ? 'PASS' : 'FAIL'}</span></div>
-                        </div>
-                    `;
+                    let resultClass = parseFloat(score.percentage) >= 70 ? 'pass' : 'fail';
+                    html += `<div class="score-card"><div><strong>Exam #${i+1}</strong> - ${new Date(score.examDate).toLocaleDateString()}</div>
+                    <div>Score: ${score.score}/${score.total} (${score.percentage}) <span class="${resultClass}">${parseFloat(score.percentage) >= 70 ? 'PASS' : 'FAIL'}</span></div></div>`;
                 });
             }
             document.getElementById("studentHistoryList").innerHTML = html;
@@ -1100,21 +843,49 @@ ANS: C</pre>
         function adminLogin() {
             let user = document.getElementById("aUser").value;
             let pass = document.getElementById("aPass").value;
-            
             if(user === "admin" && pass === "tola@121212") {
                 document.getElementById("adminLogin").classList.add('hidden');
                 document.getElementById("adminDashboard").classList.remove('hidden');
-                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
-                document.querySelector('.admin-tab').classList.add('active');
-                document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
-                document.getElementById('adminOverview').classList.remove('hidden');
                 refreshQuestions();
                 loadStudentsList();
-                updateAdminOverview();
-            } else {
-                alert("❌ Invalid admin credentials!");
+                loadScoresFromSheet();
+            } else { alert("❌ Invalid admin credentials!"); }
+        }
+        
+        function loadStudentsList() {
+            let students = loadLocalData("students");
+            let sList = document.getElementById("studentList");
+            if (!sList) return;
+            if(students.length === 0) { sList.innerHTML = "<p>No students.</p>"; }
+            else {
+                let html = "";
+                students.forEach((s, i) => {
+                    html += `<div class="student-card"><div><strong>${escapeHtml(s.username)}</strong><br><small>Registered: ${new Date(s.registered).toLocaleDateString()}</small></div>
+                    <button class="delete-btn" onclick="deleteStudent(${i})">🗑️ Delete</button></div>`;
+                });
+                sList.innerHTML = html;
             }
         }
+        
+        function deleteStudent(i) {
+            if(confirm("Delete this student?")) {
+                let students = loadLocalData("students");
+                students.splice(i, 1);
+                saveLocalData("students", students);
+                loadStudentsList();
+                updateStats();
+            }
+        }
+        
+        function deleteAllStudents() {
+            if(confirm("Delete ALL students?")) {
+                saveLocalData("students", []);
+                loadStudentsList();
+                updateStats();
+            }
+        }
+        
+        function searchStudents() { loadStudentsList(); }
         
         // ==================== EXAM FUNCTIONS ====================
         function loadExam() {
@@ -1123,25 +894,19 @@ ANS: C</pre>
                 document.getElementById("examContent").classList.add('hidden');
                 return;
             }
-            
             document.getElementById("noQuestions").classList.add('hidden');
             document.getElementById("examContent").classList.remove('hidden');
-            
             currentQuestion = 0;
             answers = {};
             examSubmitted = false;
-            currentExamId = Date.now();
             globalQuestions.forEach((_, i) => answers[i] = null);
             showQuestion();
         }
         
         function showQuestion() {
             let q = globalQuestions[currentQuestion];
-            if(!q) return;
-            
             document.getElementById("questionCounter").innerHTML = `<span style="background: #4a90e2; color: white; padding: 8px 20px;">Question ${currentQuestion+1} of ${globalQuestions.length}</span>`;
             document.getElementById("questionText").innerText = q.q;
-            
             let html = "";
             let letters = ['A', 'B', 'C', 'D'];
             q.options.forEach((opt, i) => {
@@ -1149,10 +914,8 @@ ANS: C</pre>
                 html += `<div onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')" style="margin: 10px 0; padding: 12px; background: white; border: 2px solid ${selected ? '#4a90e2' : '#eee'}; border-radius: 8px; cursor: pointer;">${letters[i]}. ${opt}</div>`;
             });
             document.getElementById("optionsContainer").innerHTML = html;
-            
             let answered = Object.values(answers).filter(a => a !== null).length;
             document.getElementById("progressText").innerHTML = `📊 ${answered}/${globalQuestions.length} Answered`;
-            
             let dots = "";
             globalQuestions.forEach((_, i) => {
                 let cls = "question-dot";
@@ -1163,82 +926,55 @@ ANS: C</pre>
             document.getElementById("questionDots").innerHTML = dots;
         }
         
-        function selectAnswer(ans) {
-            if(!examSubmitted) {
-                answers[currentQuestion] = ans;
-                showQuestion();
-            }
-        }
+        function selectAnswer(ans) { if(!examSubmitted) { answers[currentQuestion] = ans; showQuestion(); } }
+        function jumpToQuestion(i) { if(!examSubmitted) { currentQuestion = i; showQuestion(); } }
+        function nextQuestion() { if(currentQuestion < globalQuestions.length-1) { currentQuestion++; showQuestion(); } }
+        function previousQuestion() { if(currentQuestion > 0) { currentQuestion--; showQuestion(); } }
         
-        function jumpToQuestion(i) {
-            if(!examSubmitted) {
-                currentQuestion = i;
-                showQuestion();
-            }
-        }
-        
-        function nextQuestion() {
-            if(currentQuestion < globalQuestions.length-1) {
-                currentQuestion++;
-                showQuestion();
-            }
-        }
-        
-        function previousQuestion() {
-            if(currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion();
-            }
-        }
-        
-        function submitExam() {
+        async function submitExam() {
             let score = 0;
-            globalQuestions.forEach((q, i) => {
-                if(answers[i] === q.answer) score++;
-            });
-            
+            globalQuestions.forEach((q, i) => { if(answers[i] === q.answer) score++; });
             let percent = (score/globalQuestions.length)*100;
+            let status = percent >= 70 ? "PASS" : "FAIL";
             examSubmitted = true;
             
-            let scores = loadLocalData("scores");
-            scores.push({
-                id: currentExamId,
-                student: currentUser,
-                date: new Date().toISOString(),
-                score: score,
-                total: globalQuestions.length,
-                percentage: percent.toFixed(1)
-            });
-            saveLocalData("scores", scores);
-            
-            document.getElementById("result").innerHTML = `
-                <div style="background: ${percent>=70 ? '#d4edda' : '#f8d7da'}; padding: 20px; border-radius: 8px; text-align: center;">
-                    <h2>${percent>=70 ? '✅ PASSED!' : '❌ FAILED!'}</h2>
-                    <p style="font-size: 2em;">${score}/${globalQuestions.length} (${percent.toFixed(1)}%)</p>
-                </div>
-            `;
+            const saved = await saveScoreToSheet(currentUser, currentUserPassword, score, globalQuestions.length, percent.toFixed(1), status);
+            document.getElementById("result").innerHTML = `<div style="background: ${percent>=70 ? '#d4edda' : '#f8d7da'}; padding: 20px; border-radius: 8px; text-align: center;">
+                <h2>${percent>=70 ? '✅ PASSED!' : '❌ FAILED!'}</h2>
+                <p style="font-size: 2em;">${score}/${globalQuestions.length} (${percent.toFixed(1)}%)</p>
+                ${saved ? '<p style="color: #0f9d58;">✓ Score saved to Google Sheets!</p>' : '<p style="color: orange;">⚠️ Score saved locally</p>'}</div>`;
             showQuestion();
-            updateHomeStats();
-            updateAdminOverview();
+            updateStats();
+            loadScoresFromSheet();
         }
         
-        async function updateHomeStats() {
+        async function updateStats() {
             const questions = await loadQuestionsFromSheet();
             const students = loadLocalData("students");
-            const scores = loadLocalData("scores");
-            
             document.getElementById("homeTotalQuestions").innerText = questions.length;
             document.getElementById("homeTotalStudents").innerText = students.length;
-            document.getElementById("homeTotalExams").innerText = scores.length;
+            document.getElementById("homeTotalExams").innerText = allScores.length;
+            document.getElementById("adminTotalQuestions").innerText = questions.length;
+            document.getElementById("adminTotalStudents").innerText = students.length;
+            document.getElementById("adminTotalExams").innerText = allScores.length;
+            if(allScores.length > 0) {
+                let avg = allScores.reduce((sum, s) => sum + parseFloat(s.percentage), 0) / allScores.length;
+                document.getElementById("adminAvgScore").innerText = avg.toFixed(1) + '%';
+            }
+            let filter = document.getElementById("scoreFilter");
+            if(filter) {
+                filter.innerHTML = '<option value="all">All Students</option>';
+                students.forEach(s => { filter.innerHTML += `<option value="${escapeHtml(s.username)}">${escapeHtml(s.username)}</option>`; });
+            }
         }
         
-        function logout() {
-            if(confirm("Logout?")) location.reload();
-        }
+        function escapeHtml(text) { return text.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }); }
+        function logout() { if(confirm("Logout?")) location.reload(); }
         
         // Initialize
         loadQuestionsFromSheet();
-        updateHomeStats();
+        loadScoresFromSheet();
+        updateStats();
     </script>
 </body>
 </html>
