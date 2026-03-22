@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AYER AMBA ONLINE EXAM - Complete System</title>
+    <title>AYER AMBA ONLINE EXAM </title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -243,7 +243,7 @@
 <body>
     <div class="header">
         <h1>🏫 AYER AMBA ONLINE EXAM TRAINING CENTER</h1>
-        <p>Google Sheets Sync - Questions & Scores Management</p>
+        
     </div>
     
     <div class="container">
@@ -326,7 +326,7 @@
                                 <button class="btn btn-primary" onclick="nextQuestion()">Next ➔</button>
                             </div>
                             <div id="questionDots" style="text-align: center; margin: 20px;"></div>
-                            <button class="btn btn-success" onclick="submitExam()" style="width: 100%;">✅ Submit Exam</button>
+                            <button class="btn btn-success" onclick="submitExam()" style="width: 100%;">Submit Exam</button>
                             <div id="result" style="margin-top: 20px;"></div>
                         </div>
                     </div>
@@ -605,14 +605,14 @@
             } else {
                 tbody.innerHTML = "";
                 filteredScores.forEach((score) => {
-                    let resultClass = parseFloat(score.percentage) >= 70 ? 'pass' : 'fail';
+                    let resultClass = parseFloat(score.percentage) >= 50 ? 'pass' : 'fail';
                     tbody.innerHTML += `
                         <tr>
                             <td><strong>${escapeHtml(score.username)}</strong></td>
                             <td>${score.score}</td>
                             <td>${score.total}</td>
                             <td>${score.percentage}</td>
-                            <td class="${resultClass}">${score.status || (parseFloat(score.percentage) >= 70 ? 'PASS' : 'FAIL')}</td>
+                            <td class="${resultClass}">${score.status || (parseFloat(score.percentage) >= 50 ? 'PASS' : 'FAIL')}</td>
                             <td>${new Date(score.examDate).toLocaleDateString()}</td>
                         </tr>
                     `;
